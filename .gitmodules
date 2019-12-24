@@ -1,6 +1,6 @@
 [submodule "gambatte-libretro"]
 	path = gambatte-libretro
-	url = git@github.com:flagbot/gambatte-libretro.git
+	url = https://github.com/flagbot/gambatte-libretro.git
 [submodule "GCR_CMake"]
 	path = GCR_CMake
 	url = https://github.com/Makman2/GCR_CMake.git
