@@ -29,7 +29,7 @@ enum class Input {
 
 BITMASK_DEFINE(Input)
 // We need to have this after BITMASK_DEFINE, otherwise the macro does not work!
-using namespace bitmask;
+using namespace bm;
 
 class InputManager {
 public:
