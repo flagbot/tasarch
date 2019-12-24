@@ -34,11 +34,11 @@ stages:
         displayName: Build
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: '$(Pipeline.Workspace)/build/tasarch'
+          targetPath: '$(Build.SourcesDirectory)/build/tasarch'
           artifact: 'TASArch'
           publishLocation: 'pipeline'
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: '$(Pipeline.Workspace)/cores/'
+          targetPath: '$(Build.SourcesDirectory)/cores/'
           artifact: 'cores'
           publishLocation: 'pipeline'
