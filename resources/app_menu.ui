@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="appmenu">
+    <section>
+        <item>
+            <attribute name="label">_About</attribute>
+            <attribute name="action">app.about</attribute>
+        </item>
+    </section>
+    <section>
+        <item>
+            <attribute name="label">_Preferences</attribute>
+            <attribute name="action">app.settings</attribute>
+        </item>
+        <item>
+            <attribute name="label">_Keybindings</attribute>
+            <attribute name="action">app.keybindings</attribute>
+        </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Quit</attribute>
+        <attribute name="action">app.quit</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="menubar">
+    <submenu>
+        <attribute name="label">_File</attribute>
+        <section>
+        <item>
+            <attribute name="label">_Open Rom</attribute>
+            <attribute name="action">rom.open</attribute>
+        </item>
+        </section>
+        <section>
+            <submenu>
+                <attribute name="label">_Save State</attribute>
+                <item>
+                    <attribute name="label">_State 1</attribute>
+                    <attribute name="action">state.save.1</attribute>
+                </item>
+                <item>
+                    <attribute name="label">_State 2</attribute>
+                    <attribute name="action">state.save.2</attribute>
+                </item>
+            </submenu>
+            <submenu>
+                <attribute name="label">_Load State</attribute>
+                <item>
+                    <attribute name="label">_State 1</attribute>
+                </item>
+            </submenu>
+        </section>
+    </submenu>
+  </menu>
+</interface>

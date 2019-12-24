@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "rbmp.h": "c",
+        "string.h": "c",
+        "*.tcc": "cpp"
+    }
+}

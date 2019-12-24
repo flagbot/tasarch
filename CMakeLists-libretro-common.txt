@@ -1,0 +1,26 @@
+# include_directories(${PROJECT_SOURCE_DIR}/libretro-common/include/ ${PROJECT_SOURCE_DIR}/libretro-common/crt/include/)
+# set(SRC_LIBRETRO formats/bmp/rbmp.c formats/bmp/rbmp_encode.c streams/file_stream.c vfs/vfs_implementation.c)
+# list(TRANSFORM SRC_LIBRETRO PREPEND libretro-common/)
+# file(GLOB libretro_SRCS
+# 		"${PROJECT_SOURCE_DIR}/libretro-common/**/*.c"
+# 		"${PROJECT_SOURCE_DIR}/libretro-common/**/**/*.c"
+# )
+		
+# file(GLOB libretro_EXCLUDE_SRCS
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/samples/**/*.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/cdrom/*.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/glsm/*.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/glsym/*.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/compat/compat_ifaddrs.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/net/*.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/rthreads/*.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/libco/*.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/vulkan/*.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/formats/libchdr/*.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/formats/xml/*.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/**/vfs_implementation_cdrom.c"
+# 	"${PROJECT_SOURCE_DIR}/libretro-common/file/archive_file_7z.c"
+# )
+# list(REMOVE_ITEM libretro_SRCS ${libretro_EXCLUDE_SRCS})
+
+# add_library(retro_common ${libretro_SRCS})
