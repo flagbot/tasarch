@@ -22,6 +22,8 @@ stages:
       pool:
         vmImage: $(imageName)
       steps:
+      - checkout: self
+        submodules: recursive
       - bash: sudo add-apt-repository -y ppa:andrew-fuller/cmake && sudo apt-get update && sudo apt install -y cmake make build-essential g++ gcc libgtk-3-dev libgtkmm-3.0-dev
         displayName: Install Dependencies Linux
         condition: eq( variables['Agent.OS'], 'Linux' )
