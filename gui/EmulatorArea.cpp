@@ -15,25 +15,16 @@
 //#include <gdkmm/frameclock.h>
 #include "../emulator/Signals.h"
 
-EmulatorArea* EmulatorArea::Current = nullptr;
-
-static void video_refresh(const void *data, unsigned width,
-unsigned height, size_t pitch)
-{
-    EmulatorArea::Current->VideoRefresh(data, width, height, pitch);
-}
-
 EmulatorArea::EmulatorArea()
 {
-    Current = this;
     Signals::CoreLoaded.Connect(sigc::mem_fun(this, &EmulatorArea::CoreLoaded));
+    Signals::RetroVideoRefresh.Connect(sigc::mem_fun(this, &EmulatorArea::VideoRefresh));
     this->add_tick_callback(sigc::mem_fun(*this, &EmulatorArea::Tick));
 }
 
 void EmulatorArea::CoreLoaded(Core *core)
 {
     this->core = core;
-    core->RetroSetVideoRefresh(video_refresh);
 }
 
 bool EmulatorArea::Tick(const Glib::RefPtr<Gdk::FrameClock> &frame_clock)

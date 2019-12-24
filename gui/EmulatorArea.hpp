@@ -16,8 +16,6 @@ class EmulatorArea : public Gtk::DrawingArea
 {
 public:
     EmulatorArea();
-
-    static EmulatorArea* Current;
     
     void VideoRefresh(const void *data, unsigned width,
                        unsigned height, size_t pitch);

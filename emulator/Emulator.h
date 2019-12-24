@@ -10,5 +10,6 @@ public:
     void LoadCore(std::string filename);
     
     Core* core;
+    InputManager* inputs;
     
 };

@@ -9,20 +9,41 @@
 #define KeybindingsWindow_hpp
 
 #include <gtkmm.h>
+#include "../emulator/InputManager.hpp"
 
 class KeybindingsWindow : public Gtk::ApplicationWindow
 {
 public:
     KeybindingsWindow();
-     KeybindingsWindow(BaseObjectType* cobject,
-        const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
-      static KeybindingsWindow* create();
-
-      void open_file_view(const Glib::RefPtr<Gio::File>& file);
-
+    static KeybindingsWindow* create();
+    
 protected:
-      Glib::RefPtr<Gtk::Builder> m_refBuilder;
+    // Tree Model Columns
+    class ModelColumns : public Gtk::TreeModel::ColumnRecord
+    {
+    public:
+        ModelColumns()
+        {
+            add(m_col_name);
+            add(m_col_accel_key);
+            add(m_col_accel_mods);
+            add(m_col_input);
+        }
+        
+        Gtk::TreeModelColumn<Glib::ustring> m_col_name;
+        Gtk::TreeModelColumn<guint> m_col_accel_key;
+        Gtk::TreeModelColumn<Gdk::ModifierType> m_col_accel_mods;
+        Gtk::TreeModelColumn<Input> m_col_input;
+    };
+    
+    ModelColumns m_Columns;
+    
+    Gtk::ScrolledWindow m_ScrolledWindow;
+    Gtk::TreeView m_TreeView;
+    Glib::RefPtr<Gtk::ListStore> m_refTreeModel;
+    
+    void OnAccelEdited(const Glib::ustring& path_string, guint accel_key, Gdk::ModifierType accel_mods, guint hardware_keycode);
 };
 
 

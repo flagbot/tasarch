@@ -33,6 +33,10 @@ private:
 #define SIGNAL(enum, ident, ...)    inline constexpr static char str_signal_##enum [] = ident; \
 inline static Signal<str_signal_##enum, __VA_ARGS__> enum;
 
+#define RETROSIGNAL(enum, ident, ret, ...) SIGNAL(enum, ident, ret, ##__VA_ARGS__) \
+template <typename... TArgs> \
+inline static ret Emit##enum(TArgs... args) { return enum.Emit(args...); };
+
 class Signals {
 public:
     
@@ -41,6 +45,14 @@ public:
 #pragma mark Core
     SIGNAL(CoreLoaded, "core.loaded", void, Core*)
     SIGNAL(CoreInitialized, "core.initialized", void, Core*)
+    
+#pragma mark Retro
+    RETROSIGNAL(RetroInputPoll, "retro.input.poll", void)
+    RETROSIGNAL(RetroInputState, "retro.input.state", int16_t, unsigned, unsigned, unsigned, unsigned)
+    RETROSIGNAL(RetroSetEnvironment, "retro.environment.set", bool, unsigned, void*)
+    RETROSIGNAL(RetroAudioSample, "retro.audio.sample", void, int16_t, int16_t);
+    RETROSIGNAL(RetroAudioSampleBatch, "retro.audio.sample-batch", size_t, const int16_t*, size_t)
+    RETROSIGNAL(RetroVideoRefresh, "retro.video.refresh", void, const void*, size_t, size_t, size_t)
 
 #pragma mark Game
     SIGNAL(GameLoaded, "game.loaded", void, Core*)

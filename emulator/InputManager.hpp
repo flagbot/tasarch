@@ -9,6 +9,8 @@
 
 #include "../bitmask.hpp"
 #include "Core.hpp"
+#include "gtkmm.h"
+#include <unordered_map>
 
 enum class Input {
     B = 1 << 0,
@@ -23,21 +25,45 @@ enum class Input {
     X = 1 << 9,
     L = 1 << 10,
     R = 1 << 11,
-    
-    _bitmask_max_element = R
+    RESET = 1 << 16,
+    _bitmask_max_element = RESET
 };
 
 BITMASK_DEFINE(Input)
 // We need to have this after BITMASK_DEFINE, otherwise the macro does not work!
 using namespace bm;
 
+class InputMapping {
+public:
+    InputMapping(Input input = Input::B, Gtk::AccelKey shortcut = Gtk::AccelKey(), std::string name = "");
+    Input input;
+    Gtk::AccelKey shortcut;
+    std::string name;
+};
+
+#define INPUTMAP(inp, default) {Input::inp, InputMapping(Input::inp, Gtk::AccelKey(default), #inp)},
+
 class InputManager {
 public:
-    InputManager();
+    InputManager(Gtk::Window* mainWindow);
     bitmask<Input> current;
+    
+    inline static std::unordered_map<Input, InputMapping> InputMap = {
+        INPUTMAP(A, "A")
+        INPUTMAP(B, "S")
+        INPUTMAP(Y, "Y")
+        INPUTMAP(X, "X")
+        INPUTMAP(START, ".")
+    };
     
 private:
     void CoreLoaded(Core* core);
     void InputPoll();
+    int16_t GetInputState(unsigned port, unsigned device, unsigned index, unsigned id);
+    bool KeyPressEvent(GdkEventKey* event);
+    bool KeyReleaseEvent(GdkEventKey* event);
+    void RegisterKeyEvent(GdkEventKey* event, bool pressed);
+    
+    bitmask<Input> next = 0;
 };
 

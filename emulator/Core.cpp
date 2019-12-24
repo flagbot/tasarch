@@ -9,30 +9,7 @@
 #include <glib.h>
 #include <dlfcn.h>
 #include <fstream>
-
-Core* Core::Current = nullptr;
-
-static void input_poll()
-{
-    
-}
-
-static int16_t input_state(unsigned port, unsigned device,
-unsigned index, unsigned id)
-{
-    return 0;
-}
-
-static void core_audio_sample(int16_t left, int16_t right) {
-    (void)left;
-    (void)right;
-}
-
-static size_t core_audio_sample_batch(const int16_t * data, size_t frames) {
-    (void)data;
-    (void)frames;
-    return 0;
-}
+#include "Signals.h"
 
 Core::Core(void* core_handle) : core_handle(core_handle)
 {
@@ -65,16 +42,14 @@ Core::Core(void* core_handle) : core_handle(core_handle)
     
     g_message("Loaded all symbols for core. API Version: %d", RetroAPIVersion());
     
-    Current = this;
+    RetroSetEnvironment(&Signals::EmitRetroSetEnvironment);
+    RetroSetInputPoll(&Signals::EmitRetroInputPoll);
+    RetroSetInputState(&Signals::EmitRetroInputState);
+    RetroSetAudioSample(&Signals::EmitRetroAudioSample);
+    RetroSetAudioSampleBatch(&Signals::EmitRetroAudioSampleBatch);
+    RetroSetVideoRefresh(&Signals::EmitRetroVideoRefresh);
     
-    RetroSetEnvironment([](unsigned cmd, void* data) {
-        return Current->RetroCoreEnvironment(cmd, data);
-    });
-    
-    RetroSetInputPoll(input_poll);
-    RetroSetInputState(input_state);
-    RetroSetAudioSample(core_audio_sample);
-    RetroSetAudioSampleBatch(core_audio_sample_batch);
+    Signals::RetroSetEnvironment.Connect(sigc::mem_fun(this, &Core::RetroCoreEnvironment));
     
     RetroInit();
     
@@ -188,6 +163,10 @@ bool Core::LoadGame(std::string filename)
     }
     
     g_message("Loaded game!");
+    
+    has_game = true;
+    
+    this->RetroSetControllerPortDevice(0, RETRO_DEVICE_JOYPAD);
     
     return true;
 }

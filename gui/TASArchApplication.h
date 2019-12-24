@@ -17,8 +17,10 @@ protected:
     void on_activate() override;
     void on_open(const Gio::Application::type_vec_files& files,
                  const Glib::ustring& hint) override;
-
+    int on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine> &cmd) override;
+    
 private:
+    EmulatorWindow* main_window;
     EmulatorWindow* create_appwindow();
     void on_hide_window(Gtk::Window* window);
     void on_action_quit();

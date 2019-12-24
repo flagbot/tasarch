@@ -4,7 +4,7 @@
 #include <glib.h>
 
 TASArchApplication::TASArchApplication()
-: Gtk::Application("ch.flagbot.tasarch", Gio::APPLICATION_HANDLES_OPEN)
+: Gtk::Application("ch.flagbot.tasarch", Gio::APPLICATION_HANDLES_COMMAND_LINE)
 {
 }
 
@@ -30,6 +30,8 @@ EmulatorWindow* TASArchApplication::create_appwindow()
   appwindow->signal_hide().connect(sigc::bind<Gtk::Window*>(sigc::mem_fun(*this,
     &TASArchApplication::on_hide_window), appwindow));
 
+    main_window = appwindow;
+    
   return appwindow;
 }
 
@@ -80,17 +82,44 @@ void TASArchApplication::on_activate()
 void TASArchApplication::on_open(const Gio::Application::type_vec_files& files,
   const Glib::ustring& /* hint */)
 {
-  // The application has been asked to open some files,
-  // so let's open a new view for each one.
-  EmulatorWindow* appwindow = nullptr;
-  auto windows = get_windows();
-  if (windows.size() > 0)
-    appwindow = dynamic_cast<EmulatorWindow*>(windows[0]);
+    EmulatorWindow* appwindow = nullptr;
+    auto windows = get_windows();
+    if (windows.size() > 0)
+      appwindow = dynamic_cast<EmulatorWindow*>(windows[0]);
 
-  if (!appwindow)
-    appwindow = create_appwindow();
+    if (!appwindow)
+      appwindow = create_appwindow();
 
-  appwindow->present();
+    appwindow->present();
+}
+
+int TASArchApplication::on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine> &cmd)
+{
+    Glib::OptionContext ctx;
+    Glib::OptionGroup group("options", "main options");
+    
+    Glib::OptionEntry core_entry;
+    std::string core_filename = Glib::build_filename(cmd->get_cwd(), "cores", "gambatte.core");
+    core_entry.set_long_name("core");
+    
+    group.add_entry_filename(core_entry, core_filename);
+    
+    Glib::OptionEntry game_entry;
+    std::string game_filename = Glib::build_filename(cmd->get_cwd(), "pokemon_yellow.gbc");
+    core_entry.set_long_name("game");
+    
+    group.add_entry_filename(game_entry, game_filename);
+    
+    ctx.add_group(group);
+    
+    int argc;
+    char **argv = cmd->get_arguments(argc);
+    ctx.parse(argc, argv);
+    
+    activate();
+    main_window->emulator->LoadCore(core_filename);
+    main_window->emulator->core->LoadGame(game_filename);
+    return 0;
 }
 
 void TASArchApplication::on_hide_window(Gtk::Window* window)

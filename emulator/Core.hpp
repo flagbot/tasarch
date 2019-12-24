@@ -25,6 +25,8 @@ public:
     bool RetroCoreEnvironment(unsigned cmd, void* data);
     bool LoadGame(std::string filename);
     
+    bool has_game = false;
+    
     std::string library_name;
     std::string library_version;
     std::string valid_exntensions;
@@ -65,7 +67,6 @@ public:
     
 
 private:
-    static Core* Current;
     void* core_handle;
     void LoadSymbol(std::string name, void** var);
 };

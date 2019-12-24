@@ -52,7 +52,7 @@ GLogWriterOutput write_log(GLogLevelFlags log_level, const GLogField * fields, g
     
     std::stringstream fmt_file;
     
-    std::string source_folder = "/Users/leonardogalli/Code/C/noarch/";
+    std::string source_folder = SOURCE_CODE_ROOT;
     
     std::string short_file = file;
     size_t source_loc = file.find(source_folder);
