@@ -93,11 +93,11 @@ add_dependencies(${APPLICATION_NAME} gambatte_libretro resources)
 # noarch target		 #
 ######################
 
-find_package(glfw3 3.3 REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
+# find_package(glfw3 3.3 REQUIRED)
+# find_package(OpenGL REQUIRED)
+# find_package(GLEW REQUIRED)
 
-add_executable(noarch noarch.c)
-target_include_directories(noarch PRIVATE ${GLFW_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
-target_link_libraries(noarch dl glfw ${OPENGL_gl_LIBRARY} GLEW::GLEW)
-add_dependencies(noarch gambatte_libretro)
+# add_executable(noarch noarch.c)
+# target_include_directories(noarch PRIVATE ${GLFW_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
+# target_link_libraries(noarch dl glfw ${OPENGL_gl_LIBRARY} GLEW::GLEW)
+# add_dependencies(noarch gambatte_libretro)
