@@ -4,7 +4,7 @@ compiler: g++
 matrix:
   include:
     - os: linux
-      dist: bionic
+      dist: disco
       sudo: required
     - os: osx
       osx_image: xcode8.3
@@ -19,6 +19,8 @@ addons:
     packages:
     - cmake
     - build-essential
+    - gcc
+    - g++
     - libgtk-3-dev
     - libgtkmm-3.0-dev
 
