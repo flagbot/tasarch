@@ -19,7 +19,7 @@ stages:
       pool:
         vmImage: $(imageName)
       steps:
-      - bash: add-apt-repository -y ppa:andrew-fuller/cmake && sudo apt-get -qq update && apt install -y cmake make build-essential g++ gcc gtk+3 gtkmm3
+      - bash: sudo add-apt-repository -y ppa:andrew-fuller/cmake && sudo apt-get -qq update && sudo apt install -y cmake make build-essential g++ gcc gtk+3 gtkmm3
       - bash: mkdir build && cd build && cmake --version && cmake .. && make
       - task: PublishPipelineArtifact@1
         inputs:
