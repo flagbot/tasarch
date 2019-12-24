@@ -8,7 +8,7 @@ trigger:
 
 
 stages:
-  - stage: Build Linux
+  - stage: Build
     jobs:
     - job: Backend
       strategy:
