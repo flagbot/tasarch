@@ -30,7 +30,7 @@ stages:
       - bash: brew install gtk+3 gtkmm3 cmake
         displayName: Install Dependencies macOS
         condition: eq( variables['Agent.OS'], 'Darwin' )
-      - bash: mkdir build && cd build && /usr/bin/cmake --version && /usr/bin/cmake .. && make
+      - bash: mkdir build && cd build && export PATH=/usr/bin:$PATH && cmake --version && cmake .. && make
         displayName: Build
       - task: PublishPipelineArtifact@1
         inputs:
