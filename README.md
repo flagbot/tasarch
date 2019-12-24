@@ -1,16 +1,22 @@
-# noarch [![Build Status](https://travis-ci.org/RobLoach/noarch.svg?branch=master)](https://travis-ci.org/RobLoach/noarch)
+# tasarch [![Build Status](https://travis-ci.org/flagbot/tasarch.svg?branch=master)](https://travis-ci.org/flagbot/tasarch)
 
-**noarch** is a small [libretro](https://www.libretro.com/) frontend that doesn't provide any video, audio or input. It loads a Core, along with its Content, runs an iteration, and then quits. This is useful for unit testing.
+**tasarch** is a small [libretro](https://www.libretro.com/) frontend that focuses on TASing.
+It will be used in our upcoming CTF ;)
+
+Currently it will load libgambatte core by default (hardcoded path).
 
 ## Building
 
 ``` bash
-cmake .
-make
+mkdir build
+cd build
+cmake ..
+make -j8 # or something like that
 ```
 
 ## Running
 
-```
-./noarch <core> <uncompressed content>
+```bash
+# inside build
+./tasarch
 ```
