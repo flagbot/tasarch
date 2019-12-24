@@ -76,7 +76,7 @@ file(GLOB RESOURCES_GEN
 
 add_custom_target(resources ALL DEPENDS ${RESOURCE_FILE} ${RESOURCES})
 
-message(STATUS "Resource File: ${RESOURCE_FILE} ${RESOURCES} ${GTKMM_LIBRARY_DIRS}")
+message(STATUS "Resource File: ${RESOURCE_FILE} ${RESOURCES} ${GTKMM_INCLUDE_DIRS}")
 
 # SOURCE_GROUP(${folder} FILES ${${GC_ARG_VAR_PREFIX}_SRC})
 

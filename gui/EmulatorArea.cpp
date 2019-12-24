@@ -10,7 +10,9 @@
 #include <cairomm/surface.h>
 #include <gdkmm/general.h>
 #include <sstream>
-#include <gdkmm/frameclock.h>
+#include <gdkmm.h>
+#include <gdkmm/window.h>
+//#include <gdkmm/frameclock.h>
 #include "../emulator/Signals.h"
 
 EmulatorArea* EmulatorArea::Current = nullptr;
