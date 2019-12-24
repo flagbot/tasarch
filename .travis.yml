@@ -31,6 +31,7 @@ addons:
     update: true
 
 script:
+  - cmake --version
   - cmake .
   - make
 
