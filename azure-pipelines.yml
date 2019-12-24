@@ -1,0 +1,33 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+
+stages:
+  - stage: Build Linux
+    jobs:
+    - job: Backend
+      strategy:
+        matrix:
+          Linux:
+            osName: 'Linux'
+            imageName: 'ubuntu-19.04'
+      pool:
+        vmImage: $(imageName)
+      steps:
+      - bash: apt install -y cmake make build-essential g++ gcc gtk+3 gtkmm3
+      - bash: mkdir build && cd build && cmake .. && make
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(Pipeline.Workspace)/build/tasarch'
+          artifact: 'TASArch'
+          publishLocation: 'pipeline'
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(Pipeline.Workspace)/cores/'
+          artifact: 'cores'
+          publishLocation: 'pipeline'
