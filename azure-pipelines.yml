@@ -27,10 +27,10 @@ stages:
       - bash: sudo bash -c 'echo "deb http://archive.ubuntu.com/ubuntu/ disco main restricted" >> /etc/apt/sources.list' && export DEBIAN_FRONTEND=noninteractive && export UCF_FORCE_CONFOLD=1 && sudo -E apt-get update && sudo -E apt -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install -y cmake libgtk-3-dev libgtkmm-3.0-dev libarchive-dev
         displayName: Install Dependencies Linux
         condition: eq( variables['Agent.OS'], 'Linux' )
-      - bash: brew install gtk+3 gtkmm3 cmake pkg-config libarchive && export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
+      - bash: brew install gtk+3 gtkmm3 cmake pkg-config libarchive
         displayName: Install Dependencies macOS
         condition: eq( variables['Agent.OS'], 'Darwin' )
-      - bash: mkdir build && cd build && export PATH=/usr/bin:$PATH && cmake --version && cmake .. && make && export RELEASE_DIR="tasarch-$(Agent.OS)-$(Build.Id)" && mkdir $RELEASE_DIR && mkdir $RELEASE_DIR/cores && cp tasarch $RELEASE_DIR/ && cp ../cores/* $RELEASE_DIR/cores/
+      - bash: ./build_release.sh
         displayName: Build
       - task: PublishPipelineArtifact@1
         displayName: Publish Release
