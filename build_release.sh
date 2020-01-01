@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 mkdir build
 cd build
 
@@ -10,7 +12,7 @@ cmake --version
 cmake ..
 make
 
-export RELEASE_DIR="tasarch-$(Agent.OS)-$(Build.Id)"
+export RELEASE_DIR="tasarch-${Agent_OS}-${Build_Id}"
 mkdir $RELEASE_DIR
 mkdir $RELEASE_DIR/cores
 

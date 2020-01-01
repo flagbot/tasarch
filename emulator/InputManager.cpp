@@ -23,8 +23,8 @@ InputManager::InputManager(Gtk::Window* mainWindow)
     Signals::CoreLoaded.Connect(sigc::mem_fun(this, &InputManager::CoreLoaded));
     Signals::RetroInputState.Connect(sigc::mem_fun(this, &InputManager::GetInputState));
     Signals::RetroInputPoll.Connect(sigc::mem_fun(this, &InputManager::InputPoll));
-    mainWindow->signal_key_press_event().connect_notify(sigc::mem_fun(this, &InputManager::KeyPressEvent));
-    mainWindow->signal_key_release_event().connect_notify(sigc::mem_fun(this, &InputManager::KeyReleaseEvent));
+    mainWindow->signal_key_press_event().connect_notify(sigc::mem_fun(*this, &InputManager::KeyPressEvent));
+    mainWindow->signal_key_release_event().connect_notify(sigc::mem_fun(*this, &InputManager::KeyReleaseEvent));
 }
 
 void InputManager::InputPoll()
