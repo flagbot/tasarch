@@ -12,7 +12,7 @@ cmake --version
 cmake ..
 make
 
-export RELEASE_DIR="tasarch-${Agent_OS}-${Build_Id}"
+export RELEASE_DIR="tasarch-${AGENT_OS}-${BUILD_ID}"
 mkdir $RELEASE_DIR
 mkdir $RELEASE_DIR/cores
 
