@@ -8,7 +8,7 @@ trigger:
 
 
 stages:
-  - stage: Build All
+  - stage: Build_All
     jobs:
     - job: BuildAll
       strategy:
