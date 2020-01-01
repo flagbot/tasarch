@@ -19,19 +19,11 @@ EmulatorArea::EmulatorArea()
 {
     Signals::CoreLoaded.Connect(sigc::mem_fun(this, &EmulatorArea::CoreLoaded));
     Signals::RetroVideoRefresh.Connect(sigc::mem_fun(this, &EmulatorArea::VideoRefresh));
-    this->add_tick_callback(sigc::mem_fun(*this, &EmulatorArea::Tick));
 }
 
 void EmulatorArea::CoreLoaded(Core *core)
 {
     this->core = core;
-}
-
-bool EmulatorArea::Tick(const Glib::RefPtr<Gdk::FrameClock> &frame_clock)
-{
-    if (core)
-        core->RetroRun();
-    return true;
 }
 
 void EmulatorArea::VideoRefresh(const void *data, unsigned int width, unsigned int height, size_t pitch)

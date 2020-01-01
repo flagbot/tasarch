@@ -57,7 +57,7 @@ Core::Core(void* core_handle) : core_handle(core_handle)
     RetroGetSystemInfo(&system);
     library_name = system.library_name;
     library_version = system.library_version;
-    valid_exntensions = system.valid_extensions;
+    valid_extensions = system.valid_extensions;
     need_fullpath = system.need_fullpath;
     block_extract = system.block_extract;
     
@@ -164,11 +164,25 @@ bool Core::LoadGame(std::string filename)
     
     g_message("Loaded game!");
     
+    // Setup clean start.
+    clean_start_size = this->RetroSerializeSize();
+    if (clean_start) {
+        free(clean_start);
+    }
+    clean_start = malloc(clean_start_size);
+    this->RetroSerialize(clean_start, clean_start_size);
+    
     has_game = true;
     
     this->RetroSetControllerPortDevice(0, RETRO_DEVICE_JOYPAD);
+    current_game = filename;
     
     return true;
+}
+
+void Core::FullReset()
+{
+    this->RetroUnserialize(clean_start, clean_start_size);
 }
 
 Core* Core::LoadCore(std::string filepath)

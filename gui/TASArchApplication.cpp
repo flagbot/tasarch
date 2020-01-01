@@ -2,10 +2,12 @@
 #include "KeybindingsWindow.h"
 #define G_LOG_USE_STRUCTURED 1
 #include <glib.h>
+#include "../emulator/SaveManager.hpp"
 
 TASArchApplication::TASArchApplication()
 : Gtk::Application("ch.flagbot.tasarch", Gio::APPLICATION_HANDLES_COMMAND_LINE)
 {
+
 }
 
 Glib::RefPtr<TASArchApplication> TASArchApplication::create()
@@ -35,6 +37,21 @@ EmulatorWindow* TASArchApplication::create_appwindow()
   return appwindow;
 }
 
+void TASArchApplication::setup_accels()
+{
+    // App Menu
+    set_accel_for_action("app.quit", "<Primary>Q");
+
+    // File Menu
+    set_accel_for_action("win.tasmovie.save", "<Primary>S");
+    
+    // Emulator Menu
+    set_accel_for_action("win.emulator.pause", "P");
+    set_accel_for_action("win.emulator.advance", "K");
+}
+
+#pragma mark Events
+
 void TASArchApplication::on_startup()
 {
     // Call the base class's implementation.
@@ -42,9 +59,39 @@ void TASArchApplication::on_startup()
 
     // Add actions and keyboard accelerators for the application menu.
     add_action("quit", sigc::mem_fun(*this, &TASArchApplication::on_action_quit));
-    set_accel_for_action("app.quit", "<Primary>Q");
+    
+    Signals::CoreLoaded.Connect(&SaveManager::CoreLoaded);
+    
+    for (int i = 1; i <= SaveManager::NumStates; i++) {
+        std::stringstream act_name, act_accel, act_name_accel;
+        act_name << "state.save." << i;
+        act_accel << "F" << i;
+        add_action(act_name.str(), [i](){
+            SaveManager::SaveState(i);
+        });
+        act_name_accel << "app." << act_name.str();
+        set_accel_for_action(act_name_accel.str(), act_accel.str());
+    }
+    
+    for (int i = 1; i <= SaveManager::NumStates; i++) {
+        std::stringstream act_name, act_accel, act_name_accel;
+        act_name << "state.load." << i;
+        act_accel << "<shift>F" << i;
+        add_action(act_name.str(), [i](){
+            SaveManager::LoadState(i);
+        });
+        act_name_accel << "app." << act_name.str();
+        set_accel_for_action(act_name_accel.str(), act_accel.str());
+    }
+    
     add_action("keybindings", sigc::mem_fun(*this, &TASArchApplication::on_action_keybindings));
-    //set_accel_for_action("app.keybindings", "<Primary>Q");
+    
+    add_action("rom.open", sigc::mem_fun(*this, &TASArchApplication::on_action_open_rom));
+    
+    add_action("tasmovie.new", sigc::mem_fun(*this, &TASArchApplication::on_action_tasmovie_new));
+    add_action("tasmovie.open", sigc::mem_fun(*this, &TASArchApplication::on_action_tasmovie_open));
+    
+    setup_accels();
     
     auto refBuilder = Gtk::Builder::create();
     try
@@ -127,6 +174,8 @@ void TASArchApplication::on_hide_window(Gtk::Window* window)
   delete window;
 }
 
+#pragma mark Actions
+
 void TASArchApplication::on_action_quit()
 {
   // Gio::Application::quit() will make Gio::Application::run() return,
@@ -163,4 +212,129 @@ void TASArchApplication::on_action_keybindings()
     }
 
     window->present();
+}
+
+void TASArchApplication::on_action_open_rom()
+{
+    Gtk::FileChooserDialog dialog("Please choose a rom",
+            Gtk::FILE_CHOOSER_ACTION_OPEN);
+    dialog.set_transient_for(*this->main_window);
+
+    //Add response buttons the the dialog:
+    dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+    dialog.add_button("Open", Gtk::RESPONSE_OK);
+    
+    auto patterns = main_window->emulator->core->valid_extensions;
+    
+    auto gb_filter = Gtk::FileFilter::create();
+    std::string delim = "|";
+    auto start = 0U;
+    auto end = patterns.find(delim);
+    while (end != std::string::npos)
+    {
+        std::stringstream pattern;
+        pattern << "*." << patterns.substr(start, end - start);
+        gb_filter->add_pattern(pattern.str());
+        start = end + delim.length();
+        end = patterns.find(delim, start);
+    }
+
+    std::stringstream pattern;
+    pattern << "*." << patterns.substr(start, end);
+    gb_filter->add_pattern(pattern.str());
+    
+    gb_filter->set_name("ROMs");
+    
+    dialog.add_filter(gb_filter);
+
+    int result = dialog.run();
+
+    //Handle the response:
+    switch(result)
+    {
+      case(Gtk::RESPONSE_OK):
+      {
+          g_message("Selected file: %s", dialog.get_filename().c_str());
+        break;
+      }
+      case(Gtk::RESPONSE_CANCEL):
+      {
+          g_message("Cancel clicked");
+        break;
+      }
+      default:
+      {
+          g_warning("Unknown response");
+        break;
+      }
+    }
+}
+
+void TASArchApplication::on_action_tasmovie_new()
+{
+    
+    // We want to pause the emulator and fully reset it.
+    // This ensures we start from a clean state when recording the movie.
+    main_window->on_action_pause();
+    main_window->emulator->core->FullReset();
+    
+    // Initialize the new movie and open the editor_window for it.
+    movie = new TASMovie(main_window->emulator);
+    movie_editor = new TASMovieEditor(movie);
+    add_window(*movie_editor);
+    
+    movie_editor->present();
+}
+
+void TASArchApplication::on_action_tasmovie_open()
+{
+    Gtk::FileChooserDialog dialog("Please choose a TASMovie",
+            Gtk::FILE_CHOOSER_ACTION_OPEN);
+    dialog.set_transient_for(*this->main_window);
+
+    //Add response buttons the the dialog:
+    dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+    dialog.add_button("Open", Gtk::RESPONSE_OK);
+    
+    auto pattern = "*.tasmovie";
+    
+    auto gb_filter = Gtk::FileFilter::create();
+    gb_filter->add_pattern(pattern);
+    
+    gb_filter->set_name("TASMovie");
+    
+    dialog.add_filter(gb_filter);
+
+    int result = dialog.run();
+
+    //Handle the response:
+    switch(result)
+    {
+      case(Gtk::RESPONSE_OK):
+      {
+          g_message("Selected file: %s", dialog.get_filename().c_str());
+          // We want to pause the emulator and fully reset it.
+          // This ensures we start from a clean state when recording the movie.
+          main_window->on_action_pause();
+          main_window->emulator->core->FullReset();
+          
+          // Initialize the new movie and open the editor_window for it.
+          movie = TASMovie::LoadFromFile(dialog.get_filename(), main_window->emulator);
+          movie_editor = new TASMovieEditor(movie);
+          add_window(*movie_editor);
+          
+          movie_editor->present();
+          break;
+      }
+      case(Gtk::RESPONSE_CANCEL):
+      {
+          g_message("Cancel clicked");
+        break;
+      }
+      default:
+      {
+          g_warning("Unknown response");
+        break;
+      }
+    }
 }

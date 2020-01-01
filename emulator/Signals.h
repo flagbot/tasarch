@@ -56,10 +56,14 @@ public:
 
 #pragma mark Game
     SIGNAL(GameLoaded, "game.loaded", void, Core*)
+    SIGNAL(FrameRendered, "frame.rendered", void)
     
 #pragma mark Input
-    SIGNAL(InputGet, "input.get", bitmask<Input>);
+    SIGNAL(InputGet, "input.get", bitmask<Input>, bitmask<Input>);
     SIGNAL(InputUpdated, "input.updated", void, bitmask<Input>);
+    
+#pragma mark Movie
+    SIGNAL(MovieFrameChanged, "movie.frame.changed", void, long);
     
 #pragma clang diagnostic pop
 };

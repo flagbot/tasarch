@@ -10,7 +10,7 @@
 #include "../bitmask.hpp"
 #include "Core.hpp"
 #include "gtkmm.h"
-#include <unordered_map>
+#include <vector>
 
 enum class Input {
     B = 1 << 0,
@@ -41,19 +41,25 @@ public:
     std::string name;
 };
 
-#define INPUTMAP(inp, default) {Input::inp, InputMapping(Input::inp, Gtk::AccelKey(default), #inp)},
+#define INPUTMAP(inp, default) {InputMapping(Input::inp, Gtk::AccelKey(default), #inp)},
 
 class InputManager {
 public:
     InputManager(Gtk::Window* mainWindow);
     bitmask<Input> current;
     
-    inline static std::unordered_map<Input, InputMapping> InputMap = {
+    inline static std::vector<InputMapping> InputMap = {
         INPUTMAP(A, "A")
         INPUTMAP(B, "S")
-        INPUTMAP(Y, "Y")
         INPUTMAP(X, "X")
-        INPUTMAP(START, ".")
+        INPUTMAP(Y, "Y")
+        INPUTMAP(UP, "Up")
+        INPUTMAP(DOWN, "Down")
+        INPUTMAP(LEFT, "Left")
+        INPUTMAP(RIGHT, "Right")
+        INPUTMAP(START, "period")
+        INPUTMAP(SELECT, "comma")
+        INPUTMAP(RESET, "R")
     };
     
 private:

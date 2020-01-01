@@ -26,6 +26,5 @@ protected:
     
     void CoreLoaded(Core* core);
     //Override default signal handler:
-    bool Tick(const Glib::RefPtr<Gdk::FrameClock>& frame_clock);
     bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 };

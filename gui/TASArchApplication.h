@@ -2,6 +2,7 @@
 
 #include <gtkmm.h>
 #include "EmulatorWindow.h"
+#include "TASMovieEditor.hpp"
 
 class TASArchApplication: public Gtk::Application
 {
@@ -22,7 +23,14 @@ protected:
 private:
     EmulatorWindow* main_window;
     EmulatorWindow* create_appwindow();
+    TASMovie* movie;
+    TASMovieEditor* movie_editor;
+    
+    void setup_accels();
     void on_hide_window(Gtk::Window* window);
     void on_action_quit();
     void on_action_keybindings();
+    void on_action_open_rom();
+    void on_action_tasmovie_new();
+    void on_action_tasmovie_open();
 };

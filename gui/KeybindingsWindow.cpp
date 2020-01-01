@@ -25,12 +25,12 @@ KeybindingsWindow::KeybindingsWindow()
     m_refTreeModel = Gtk::ListStore::create(m_Columns);
     m_TreeView.set_model(m_refTreeModel);
     
-    for (auto pair : InputManager::InputMap) {
+    for (auto mapping : InputManager::InputMap) {
         Gtk::TreeModel::Row row = *(m_refTreeModel->append());
-        row[m_Columns.m_col_name] = pair.second.name;
-        row[m_Columns.m_col_accel_key] = pair.second.shortcut.get_key();
-        row[m_Columns.m_col_accel_mods] = pair.second.shortcut.get_mod();
-        row[m_Columns.m_col_input] = pair.first;
+        row[m_Columns.m_col_name] = mapping.name;
+        row[m_Columns.m_col_accel_key] = mapping.shortcut.get_key();
+        row[m_Columns.m_col_accel_mods] = mapping.shortcut.get_mod();
+        row[m_Columns.m_col_input] = mapping.input;
     }
     
     m_TreeView.append_column("Name", m_Columns.m_col_name);
@@ -63,7 +63,13 @@ void KeybindingsWindow::OnAccelEdited(const Glib::ustring &path_string, guint ac
         
         Input inp = row[m_Columns.m_col_input];
         
-        InputManager::InputMap[inp].shortcut = Gtk::AccelKey(accel_key, accel_mods);
+        auto iter = std::find_if(InputManager::InputMap.begin(), InputManager::InputMap.end(), [inp](auto mapping){
+            return mapping.input == inp;
+        });
+        
+        iter->shortcut = Gtk::AccelKey(accel_key, accel_mods);
+        Glib::ustring name = row[m_Columns.m_col_name];
+        g_message("Update mapping for %s: %s", name.c_str(), Gtk::AccelGroup::name(accel_key, accel_mods).c_str());
     }
     
 }
