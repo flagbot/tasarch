@@ -66,8 +66,8 @@ private:
     void CoreLoaded(Core* core);
     void InputPoll();
     int16_t GetInputState(unsigned port, unsigned device, unsigned index, unsigned id);
-    bool KeyPressEvent(GdkEventKey* event);
-    bool KeyReleaseEvent(GdkEventKey* event);
+    void KeyPressEvent(GdkEventKey* event);
+    void KeyReleaseEvent(GdkEventKey* event);
     void RegisterKeyEvent(GdkEventKey* event, bool pressed);
     
     bitmask<Input> next = 0;

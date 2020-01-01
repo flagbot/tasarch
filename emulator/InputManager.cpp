@@ -41,16 +41,14 @@ int16_t InputManager::GetInputState(unsigned int port, unsigned int device, unsi
     return (current & (Input)(1 << id)).bits();
 }
 
-bool InputManager::KeyPressEvent(GdkEventKey *event)
+void InputManager::KeyPressEvent(GdkEventKey *event)
 {
     RegisterKeyEvent(event, true);
-    return false;
 }
 
-bool InputManager::KeyReleaseEvent(GdkEventKey *event)
+void InputManager::KeyReleaseEvent(GdkEventKey *event)
 {
     RegisterKeyEvent(event, false);
-    return false;
 }
 
 void InputManager::RegisterKeyEvent(GdkEventKey *event, bool pressed)

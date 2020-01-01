@@ -10,7 +10,7 @@ export PATH=/usr/bin:$PATH
 export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig" # for macos
 cmake --version
 cmake ..
-make
+make -j`nproc`
 
 export RELEASE_DIR="tasarch-${AGENT_OS}-${BUILD_ID}"
 mkdir $RELEASE_DIR
