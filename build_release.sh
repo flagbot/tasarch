@@ -12,11 +12,10 @@ cmake --version
 cmake ..
 make -j`nproc`
 
-export RELEASE_DIR="tasarch-${AGENT_OS}-${BUILD_ID}"
+export RELEASE_DIR="tasarch-${AGENT_OS}-${BUILD_BUILDNUMBER}"
 mkdir $RELEASE_DIR
 mkdir $RELEASE_DIR/cores
 
 echo "Making Release Directory in $RELEASE_DIR"
-env
 cp tasarch $RELEASE_DIR/
 cp ../cores/* $RELEASE_DIR/cores/

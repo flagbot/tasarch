@@ -21,6 +21,7 @@ stages:
             imageName: 'macos-10.14'
       pool:
         vmImage: $(imageName)
+      name: $(SourceBranchName)-$(Build.SourceVersion)
       steps:
       - checkout: self
         submodules: recursive
@@ -35,6 +36,6 @@ stages:
       - task: PublishPipelineArtifact@1
         displayName: Publish Release
         inputs:
-          targetPath: '$(Build.SourcesDirectory)/build/tasarch-$(Agent.OS)-$(Build.Id)'
-          artifact: 'tasarch-$(Agent.OS)-$(Build.Id)'
+          targetPath: '$(Build.SourcesDirectory)/build/tasarch-$(Agent.OS)-$(Build.BuildNumber)'
+          artifact: 'tasarch-$(Agent.OS)-$(Build.BuildNumber)'
           publishLocation: 'pipeline'
