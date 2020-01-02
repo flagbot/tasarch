@@ -5,8 +5,7 @@
 
 trigger:
 - master
-
-
+name: $(SourceBranchName)-$(Build.SourceVersion)
 stages:
   - stage: Build_All
     jobs:
@@ -21,7 +20,6 @@ stages:
             imageName: 'macos-10.14'
       pool:
         vmImage: $(imageName)
-      name: $(SourceBranchName)-$(Build.SourceVersion)
       steps:
       - checkout: self
         submodules: recursive
