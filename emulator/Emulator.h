@@ -21,8 +21,9 @@ public:
 private:
     guint ui_connection = -1;
     Gtk::Widget* ui_widget = nullptr;
+    sigc::connection ui_iter;
     
     void RunOneFrame();
     bool Tick(const Glib::RefPtr<Gdk::FrameClock>& frame_clock);
-
+    void Tick2();
 };

@@ -2,6 +2,11 @@
 #include "EmulatorArea.hpp"
 #include "../emulator/InputManager.hpp"
 
+static gboolean tick_callback(GtkWidget* widget, GdkFrameClock *frame_clock, gpointer user_data) {
+    Signals::Draw.Emit();
+    return true;
+}
+
 EmulatorWindow::EmulatorWindow()
 : Gtk::ApplicationWindow()
 {
@@ -16,6 +21,8 @@ EmulatorWindow::EmulatorWindow()
     
     add_action("emulator.pause", sigc::mem_fun(*this, &EmulatorWindow::on_action_pause));
     add_action("emulator.advance", sigc::mem_fun(*this, &EmulatorWindow::on_action_advance));
+    
+    gtk_widget_add_tick_callback(GTK_WIDGET(this->gobj()), tick_callback, NULL, NULL);
     //this->emulator->core->LoadGame("/Users/leonardogalli/Code/C/noarch/pokemon_yellow.gbc");
 }
 

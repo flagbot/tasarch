@@ -57,6 +57,7 @@ public:
 #pragma mark Game
     SIGNAL(GameLoaded, "game.loaded", void, Core*)
     SIGNAL(FrameRendered, "frame.rendered", void)
+    SIGNAL(Draw, "draw", void)
     
 #pragma mark Input
     SIGNAL(InputGet, "input.get", bitmask<Input>, bitmask<Input>);

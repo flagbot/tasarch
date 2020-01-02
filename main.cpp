@@ -8,6 +8,8 @@
 #include <iomanip>
 #include <ctime>
 
+#ifdef CUSTOM_LOG
+
 std::string get_string(std::unordered_map<std::string, GLogField>* fields, std::string name, std::string value = "")
 {
     if (fields->find(name) != fields->end()) {
@@ -76,9 +78,13 @@ GLogWriterOutput write_log(GLogLevelFlags log_level, const GLogField * fields, g
     return GLogWriterOutput::G_LOG_WRITER_HANDLED;
 }
 
+#endif // CUSTOM_LOG
+
 int main(int argc, char *argv[])
 {
+#ifdef CUSTOM_LOG
     g_log_set_writer_func(write_log, nullptr, nullptr);
+#endif
 
     auto application = TASArchApplication::create();
         
