@@ -72,13 +72,13 @@ bool EmulatorArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
             cr->set_source_rgb(0.7, 0.7, 0.1);
             cr->move_to(10, 20);
             
-            auto curr_frame = this->get_frame_clock()->get_frame_time();
+            /*auto curr_frame = this->get_frame_clock()->get_frame_time();
             auto prev_frame = this->get_frame_clock()->get_timings(this->get_frame_clock()->get_frame_counter() - 1)->get_frame_time();
             std::stringstream fps;
             
             fps << (curr_frame - prev_frame) / (1000.0 * 1000.0) << "ms, " << 1 / ((curr_frame - prev_frame) / (1000.0 * 1000.0)) << " fps";
             
-            cr->show_text(fps.str());
+            cr->show_text(fps.str());*/
         } catch(std::exception& ex) {
             g_error("Had exception when painting: %s", ex.what());
             return false;
