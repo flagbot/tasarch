@@ -87,7 +87,7 @@ SOURCE_GROUP(TREE ${PROJECT_SOURCE_DIR} PREFIX "" FILES ${emulator_SRC} ${gui_SR
 add_executable(${APPLICATION_NAME} main.cpp ${emulator_SRC} ${gui_SRC} ${movie_SRC} ${RESOURCES} ${RESOURCE_FILE})
 target_include_directories(${APPLICATION_NAME} PRIVATE ${GTKMM_INCLUDE_DIRS} ${libarchive_INCLUDE_DIRS} /usr/local/opt/freetype/include/freetype2)
 target_link_libraries(${APPLICATION_NAME} dl ${GTKMM_LIBRARIES} ${libarchive_LIBRARIES})
-target_compile_options(${APPLICATION_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++14 -DG_LOG_USE_STRUCTURED=0 -DSOURCE_CODE_ROOT="${PROJECT_SOURCE_DIR}/">)
+target_compile_options(${APPLICATION_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-std=c++14 -DSOURCE_CODE_ROOT="${PROJECT_SOURCE_DIR}/">)
 target_link_directories(${APPLICATION_NAME} PRIVATE ${GTKMM_LIBRARY_DIRS})
 add_dependencies(${APPLICATION_NAME} gambatte_libretro resources)
 
